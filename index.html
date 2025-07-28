@@ -5,16 +5,17 @@
         <title>Black Hole</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <meta property="og:url"                content="https://oseiskar.github.io/black-hole" />
-        <meta property="og:title"              content="THREE.js Black Hole" />
-        <meta property="og:description"        content="A real time ray-traced simulation of a Schwarzschild black hole. Needs a decent GPU and a recent variant of Chrome or Firefox to run smoothly." />
-        <meta property="og:image"              content="http://oseiskar.github.io/img/black-hole.jpg" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23000'/><circle cx='50' cy='50' r='35' fill='none' stroke='%23ff6600' stroke-width='2' opacity='0.8'/><circle cx='50' cy='50' r='25' fill='none' stroke='%23ffaa00' stroke-width='1' opacity='0.6'/></svg>" type="image/svg+xml">
+        <meta property="og:url"                content="https://your-domain.com/black-hole" />
+        <meta property="og:title"              content="Black Hole Visualization" />
+        <meta property="og:description"        content="A real time ray-traced simulation of a Schwarzschild black hole. Interactive physics demonstration with relativistic effects." />
+        <meta property="og:image"              content="https://your-domain.com/black-hole/assets/preview.jpg" />
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     </head>
     <body>
         <div id="hint-text" class="hidden-phone initially-hidden">
-            Drag to rotate or toggle variables on the right ⟶
+            ⟵ Drag to rotate or toggle variables on the left
         </div>
         <div class="info ">
             <div id="loader">
@@ -27,36 +28,166 @@
 
         </div>
 
-        <div class="link-bar">
-            <a href="README" target="_blank"><i class="fa fa-question-circle fa-lg"></i> What is this?</a>
-            |
-            <a href="https://github.com/oseiskar/black-hole" target="_blank"><i class="fa fa-github fa-lg"></i> Source</a>
-            |
-            <a href="docs/physics.html" target="_blank"><i class="fa fa-lg">&Sigma;</i> Physics</a>
-            |
-            <a href="COPYRIGHT" target="_blank"><i class="fa fa-copyright fa-lg"></i> Copyright</a>
+        <!-- Copyright Icon (bottom right) -->
+        <div class="copyright-icon" id="copyrightIcon">
+            <i class="fa fa-copyright fa-lg"></i>
+        </div>
+
+        <!-- Music Button (bottom left) -->
+        <div class="music-icon" id="musicIcon">
+            <i class="fa fa-music fa-lg" id="musicIconSymbol"></i>
+        </div>
+
+        <!-- Hidden Audio Element -->
+        <audio id="backgroundMusic" loop>
+            <source src="assets/sakura.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- Hidden Credits Panel -->
+        <div class="credits-panel hidden" id="creditsPanel">
+            <div class="credits-header">
+                <h3>Credits & Information</h3>
+                <button class="close-btn" id="closeCredits">&times;</button>
+            </div>
+            <div class="credits-content">
+                <div class="credit-section">
+                    <h4>Attribution</h4>
+                    <p>Based on the amazing work by <a href="https://github.com/oseiskar/black-hole" target="_blank">oseiskar</a></p>
+                    <p>Modified for personal use</p>
+                </div>
+                <div class="credit-section">
+                    <h4>Resources</h4>
+                    <a href="https://oseiskar.github.io/black-hole/README" target="_blank"><i class="fa fa-question-circle"></i> What is this?</a><br>
+                    <a href="https://github.com/oseiskar/black-hole" target="_blank"><i class="fa fa-github"></i> Original Source</a><br>
+                    <a href="https://oseiskar.github.io/black-hole/docs/physics.html" target="_blank"><i class="fa">&Sigma;</i> Physics Details</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="controls" class="controls-panel">
+            <div class="controls-header">
+                <h3>Black Hole Controls</h3>
+                <button id="toggleControls" class="toggle-btn">+</button>
+            </div>
+            <div class="controls-content collapsed" id="controlsContent">
+                
+                <!-- Basic Settings -->
+                <div class="control-section">
+                    <h4>Basic Settings</h4>
+                    <div class="control-group">
+                        <label for="qualitySelect">Quality</label>
+                        <select id="qualitySelect">
+                            <option value="fast">Fast</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="accretionDisk">Accretion Disk</label>
+                        <input type="checkbox" id="accretionDisk" checked>
+                    </div>
+                </div>
+
+                <!-- Observer Controls -->
+                <div class="control-section">
+                    <h4>Observer</h4>
+                    <div class="control-group">
+                        <label for="observerMotion">Observer Motion</label>
+                        <input type="checkbox" id="observerMotion">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="observerDistance">Observer Distance</label>
+                        <input type="range" id="observerDistance" min="1.5" max="30" step="0.1" value="15">
+                        <span id="distanceValue">15.0</span>
+                    </div>
+                </div>
+
+                <!-- Planet Controls -->
+                <div class="control-section" id="planetSection">
+                    <h4>Planet</h4>
+                    <div class="control-group">
+                        <label for="planetEnabled">Planet Enabled</label>
+                        <input type="checkbox" id="planetEnabled">
+                    </div>
+                    
+                    <div class="control-group planet-control">
+                        <label for="planetDistance">Planet Distance</label>
+                        <input type="range" id="planetDistance" min="1.5" max="30" step="0.1" value="8">
+                        <span id="planetDistanceValue">8.0</span>
+                    </div>
+                    
+                    <div class="control-group planet-control">
+                        <label for="planetRadius">Planet Radius</label>
+                        <input type="range" id="planetRadius" min="0.01" max="2.0" step="0.01" value="0.5">
+                        <span id="planetRadiusValue">0.5</span>
+                    </div>
+                </div>
+
+                <!-- Relativistic Effects -->
+                <div class="control-section">
+                    <h4>Relativistic Effects</h4>
+                    <div class="control-group">
+                        <label for="aberration">Aberration</label>
+                        <input type="checkbox" id="aberration" checked>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="beaming">Beaming</label>
+                        <input type="checkbox" id="beaming" checked>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="dopplerShift">Doppler Shift</label>
+                        <input type="checkbox" id="dopplerShift" checked>
+                    </div>
+                    
+                    <div class="control-group planet-effect">
+                        <label for="gravitationalTimeDilation">Gravitational Time Dilation</label>
+                        <input type="checkbox" id="gravitationalTimeDilation" checked>
+                    </div>
+                    
+                    <div class="control-group planet-effect">
+                        <label for="lorentzContraction">Lorentz Contraction</label>
+                        <input type="checkbox" id="lorentzContraction" checked>
+                    </div>
+                </div>
+
+                <!-- Time Controls -->
+                <div class="control-section">
+                    <h4>Time</h4>
+                    <div class="control-group">
+                        <label for="lightTravelTime">Light Travel Time</label>
+                        <input type="checkbox" id="lightTravelTime" checked>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="timeScale">Time Scale</label>
+                        <input type="range" id="timeScale" min="0" max="5" step="0.1" value="2">
+                        <span id="timeScaleValue">2.0</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="control-section">
+                    <div class="control-group">
+                        <button id="resetView" class="reset-btn">Reset View</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="js-libs/jquery-2.1.4.min.js"></script>
         <script src="js-libs/three.min.js"></script>
         <script src="js-libs/OrbitControls.js"></script>
         <script src="js-libs/Detector.js"></script>
-        <script src="js-libs/stats.min.js"></script>
         <script src="js-libs/ShaderLoader.min.js"></script>
         <script src="js-libs/mustache.min.js"></script>
-        <script src="js-libs/dat.gui.min.js"></script>
         <script src="three-js-monkey-patch.js"></script>
 
-        <script id="vertex-shader" type="x-shader/x-vertex">
-
-            void main()    {
-
-                gl_Position = vec4( position, 1.0 );
-
-            }
-
-        </script>
-        <script data-src="raytracer.glsl" data-name="raytracer" type="x-shader/x-fragment"></script>
+        <script data-src="shaders/fragment.glsl" data-name="raytracer" type="x-shader/x-fragment"></script>
         <script src="main.js"></script>
 
     </body>

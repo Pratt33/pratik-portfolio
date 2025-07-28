@@ -11,7 +11,7 @@
    - [mustache.js](https://github.com/janl/mustache.js)
    - [ShaderLoader.js](https://github.com/codecruzer/webgl-shader-loader-js)
  * The Milky Way image `img/milkyway.jpg` is from [Stellarium](http://www.stellarium.org/wiki/index.php/Textures) and "based on Nick Risinger's [Photopic Sky Survey](http://skysurvey.org/) image under [CC-BY-NC 2.0](http://creativecommons.org/licenses/by-nc/2.0/)."
- * All other files in this repository, https://github.com/oseiskar/black-hole, are hereby licensed under the MIT license:
+ * All original files from the repository https://github.com/oseiskar/black-hole are licensed under the MIT license:
  
        Copyright (c) 2015 Otto Seiskari
 
@@ -32,3 +32,15 @@
        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
        SOFTWARE.
+
+## Modified Version
+
+This version includes significant enhancements and modifications:
+
+* **User Interface Improvements**: Modern responsive control panel with collapsible sections
+* **Music System**: Background audio player with ambient music (sakura.mp3)
+* **Enhanced UX**: Improved styling, attribution system, and mobile-friendly design
+* **Code Organization**: Restructured files, cleaned dependencies, and better documentation
+* **Additional Features**: Reset functionality, visual enhancements, and accessibility improvements
+
+These modifications are provided under the same MIT license terms as the original work.
