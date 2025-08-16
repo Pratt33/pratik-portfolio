@@ -11,6 +11,7 @@
         <meta property="og:description"        content="A real time ray-traced simulation of a Schwarzschild black hole. Interactive physics demonstration with relativistic effects." />
         <meta property="og:image"              content="https://your-domain.com/black-hole/assets/preview.jpg" />
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="portfolio.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     </head>
     <body>
@@ -43,6 +44,30 @@
             <source src="assets/sakura.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+
+        <!-- Portfolio Right Sidebar Navigation -->
+        <div class="portfolio-sidebar" id="portfolioSidebar">
+            <div class="portfolio-nav-item" data-section="about">
+                <i class="fa fa-user"></i>
+                <span class="nav-text">About</span>
+            </div>
+            <div class="portfolio-nav-item" data-section="projects">
+                <i class="fa fa-code"></i>
+                <span class="nav-text">Projects</span>
+            </div>
+            <div class="portfolio-nav-item" data-section="skills">
+                <i class="fa fa-cogs"></i>
+                <span class="nav-text">Skills</span>
+            </div>
+            <div class="portfolio-nav-item" data-section="experience">
+                <i class="fa fa-briefcase"></i>
+                <span class="nav-text">Experience</span>
+            </div>
+            <div class="portfolio-nav-item" data-section="contact">
+                <i class="fa fa-envelope"></i>
+                <span class="nav-text">Contact</span>
+            </div>
+        </div>
 
         <!-- Hidden Credits Panel -->
         <div class="credits-panel hidden" id="creditsPanel">
@@ -189,6 +214,7 @@
 
         <script data-src="shaders/fragment.glsl" data-name="raytracer" type="x-shader/x-fragment"></script>
         <script src="main.js"></script>
+        <script src="portfolio.js"></script>
 
     </body>
 </html>
